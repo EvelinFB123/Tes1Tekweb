@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tes1Tekweb</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        header {
+            background-color: lightskyblue;
+            padding: 1%;
+            text-align: left;
+            font-size: 20;
+            color: white;
+        }
+        body ,h2{
+            margin: 0;
+            padding: 0;
+        }
+        .card-group {
+            min-height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Kanban View</h2>
+    </header>
+    <div class="card-group">
+        <div class="card bg">
+        <div class="card-body text-center">
+            <div class="card-header">Pending</div>
+            <ul id="pendingTasks"></ul>
+        </div>
+        </div>
+    <div class="card bg">
+        <div class="card-body text-center">
+            <div class="card-header">Planning</div>
+            <ul id="planningTasks"></ul>
+        </div>
+    </div>
+    <div class="card bg">
+        <div class="card-body text-center">
+            <div class="card-header">Design</div>
+            <ul id="designTasks"></ul>
+
+        </div>
+    </div>
+    <div class="card bg">
+        <div class="card-body text-center">
+            <div class="card-header">Development</div>
+            <ul id="developmentTasks"></ul>
+        </div>
+    </div>  
+        <div class="card bg">
+        <div class="card-body text-center">
+            <div class="card-header">Testing</div>
+            <ul id="testingTasks"></ul>
+        </div>
+        </div>
+        <div class="card bg">
+            <div class="card-body text-center">
+            <div class="card-header">Resolved</div>
+            <ul id="resolvedTasks"></ul>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <!-- No 2 -->
+    <a href="inputPage.html" button type="button" class="btn btn-primary" role = "button">Input Task</a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function renderTasks() {
+            $('#pendingTasks, #planningTasks, #designTasks, #developmentTasks, #testingTasks, #resolvedTasks').empty();
+            
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            
+            tasks.forEach(function(task, index) {
+                let taskCard = `
+                    <div class="card task-card" data-index="${index}">
+                        <div class="card-body">
+                            ${task.task}
+                        </div>
+                    </div>
+                `;
+                switch(task.status) {
+                    case 'Pending':
+                        $('#pendingTasks').append(taskCard);
+                        break;
+                    case 'Planning':
+                        $('#planningTasks').append(taskCard);
+                        break;
+                    case 'Design':
+                        $('#designTasks').append(taskCard);
+                        break;
+                    case 'Development':
+                        $('#developmentTasks').append(taskCard);
+                        break;
+                    case 'Testing':
+                        $('#testingTasks').append(taskCard);
+                        break;
+                    case 'Resolved':
+                        $('#resolvedTasks').append(taskCard);
+                        break;
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            renderTasks();
+
+            $(document).on('dblclick', '.task-card', function() {
+                let taskIndex = $(this).data('index');
+                let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                tasks.splice(taskIndex, 1);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                renderTasks();
+            });
+        });
+    </script>
+</body>
+</html>
